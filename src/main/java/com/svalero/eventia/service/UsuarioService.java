@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.ReflectionUtils;
+import com.svalero.eventia.domain.UsuarioV2;
+import com.svalero.eventia.repository.UsuarioRepositoryV2;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -18,6 +20,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UsuarioRepositoryV2 usuarioRepositoryV2;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -32,8 +37,17 @@ public class UsuarioService {
                 .orElseThrow(UsuarioNotFoundException::new);
     }
 
+    public UsuarioV2 findByIdV2(long id) throws UsuarioNotFoundException {
+        return usuarioRepositoryV2.findById(id)
+                .orElseThrow(UsuarioNotFoundException::new);
+    }
+
     public Usuario add(Usuario usuario) {
         return usuarioRepository.save(usuario);
+    }
+
+    public UsuarioV2 addV2(UsuarioV2 usuario) {
+        return usuarioRepositoryV2.save(usuario);
     }
 
     public void delete(long id) throws UsuarioNotFoundException {
@@ -42,6 +56,15 @@ public class UsuarioService {
 
         usuarioRepository.delete(usuario);
     }
+
+    public String deleteV2(long id) throws UsuarioNotFoundException {
+        UsuarioV2 usuario = usuarioRepositoryV2.findById(id)
+                .orElseThrow(UsuarioNotFoundException::new);
+
+        usuarioRepositoryV2.delete(usuario);
+        return "Usuario eliminado correctamente";
+    }
+
 
     public Usuario modify(long id, Usuario nuevoUsuario) throws UsuarioNotFoundException {
         Usuario usuario = usuarioRepository.findById(id)
@@ -59,6 +82,25 @@ public class UsuarioService {
         usuario.setSaldoCuenta(nuevoUsuario.getSaldoCuenta());
 
         return usuarioRepository.save(usuario);
+    }
+
+    public UsuarioV2 modifyV2(long id, UsuarioV2 nuevoUsuario) throws UsuarioNotFoundException {
+        UsuarioV2 usuario = usuarioRepositoryV2.findById(id)
+                .orElseThrow(UsuarioNotFoundException::new);
+
+        usuario.setNombre(nuevoUsuario.getNombre());
+        usuario.setApellidos(nuevoUsuario.getApellidos());
+        usuario.setEmail(nuevoUsuario.getEmail());
+        usuario.setPassword(nuevoUsuario.getPassword());
+        usuario.setTelefono(nuevoUsuario.getTelefono());
+        usuario.setActivo(nuevoUsuario.isActivo());
+        usuario.setFechaNacimiento(nuevoUsuario.getFechaNacimiento());
+        usuario.setEventosAsistidos(nuevoUsuario.getEventosAsistidos());
+        usuario.setRol(nuevoUsuario.getRol());
+        usuario.setSaldoCuenta(nuevoUsuario.getSaldoCuenta());
+        usuario.setNickname(nuevoUsuario.getNickname());
+
+        return usuarioRepositoryV2.save(usuario);
     }
 
     public List<Usuario> findAll(String nombre, String email, String rol) {
