@@ -1,0 +1,13 @@
+name: eventia
+services:
+  db:
+    image: mariadb:11.3.2
+    container_name: eventia-db
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+      MYSQL_DATABASE: eventia_db
+      MYSQL_PORT: 3306,
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"

@@ -1,0 +1,865 @@
+{
+  "info": {
+    "_postman_id": "3409b8cc-3786-4482-8d03-b489253de306",
+    "name": "New Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53466918",
+    "_collection_link": "https://go.postman.co/collection/53466918-3409b8cc-3786-4482-8d03-b489253de306?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "eventia",
+      "item": [
+        {
+          "name": "usuarios",
+          "item": [
+            {
+              "name": "/usuarios",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombre\": \"Lucia\",\r\n  \"apellidos\": \"Usuario de pruena\",\r\n  \"email\": \"lulu@prueba.com\",\r\n  \"password\": \"123456\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/usuarios",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/usuarios",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombre\": \"Lulu\",\r\n  \"apellidos\": \"Test\",\r\n  \"email\": \"lulu@test.com\",\r\n  \"password\": \"123456\",\r\n  \"telefono\": \"123456789\",\r\n  \"activo\": true,\r\n  \"fechaNacimiento\": \"2000-01-01\",\r\n  \"eventosAsistidos\": 0,\r\n  \"rol\": \"USER\",\r\n  \"saldoCuenta\": 100.0\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/usuarios",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "usuarios"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/usuarios/:id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/usuarios/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "usuarios",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/usuarios/:id",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombre\": \"Lulu Updated\",\r\n  \"apellidos\": \"Test Updated\",\r\n  \"email\": \"luluUPDATED@test.com\",\r\n  \"password\": \"123456\",\r\n  \"telefono\": \"987654321\",\r\n  \"activo\": true,\r\n  \"fechaNacimiento\": \"2000-01-01\",\r\n  \"eventosAsistidos\": 5,\r\n  \"rol\": \"ADMIN\",\r\n  \"saldoCuenta\": 200.0\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/usuarios/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "usuarios",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/usuarios/:id",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombre\": \"PEPA\",\r\n  \"email\": \"lucia@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/usuarios/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "usuarios",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/usuarios/:id",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/usuarios/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "usuarios",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "artistas",
+          "item": [
+            {
+              "name": "/artistas",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombreArtistico\": \"Aitana\",\r\n  \"nombreReal\": \"Aitana Ocaña\",\r\n  \"generoMusical\": \"Pop\",\r\n  \"fechaNacimiento\": \"1999-06-27\",\r\n  \"activo\": true,\r\n  \"cache\": 15000.0,\r\n  \"eventosRealizados\": 20\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/artistas",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "artistas"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/artistas",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/artistas",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "artistas"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/artistas/:id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/artistas/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "artistas",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/artistas/activos",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/artistas/activos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "artistas",
+                    "activos"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/artistas/:id",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombreArtistico\": \"Bad Bunny Updated\",\r\n  \"nombreReal\": \"Benito Antonio Martinez\",\r\n  \"generoMusical\": \"Urbano\",\r\n  \"paisOrigen\": \"Puerto Rico\",\r\n  \"fechaDebut\": \"2016-01-01\",\r\n  \"activo\": true,\r\n  \"cachePorEvento\": 75000.0\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/artistas/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "artistas",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/artistas/:id",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombreArtistico\": \"Lucía\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/artistas/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "artistas",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/artistas/:id",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/artistas/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "artistas",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "recintos",
+          "item": [
+            {
+              "name": "/recintos",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombre\": \"Wizink Center\",\r\n  \"direccion\": \"Avenida Felipe II\",\r\n  \"ciudad\": \"Madrid\",\r\n  \"capacidad\": 15000,\r\n  \"cubierto\": true,\r\n  \"precioAlquiler\": 30000.0,\r\n  \"eventosCelebrados\": 100,\r\n  \"fechaInauguracion\": \"2005-01-01\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/recintos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "recintos"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/recintos",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/recintos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "recintos"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/recintos/:id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/recintos/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "recintos",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/recintos/:id",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombre\": \"Wizink Center Updated\",\r\n  \"direccion\": \"Avenida Felipe II 2\",\r\n  \"ciudad\": \"Madrid\",\r\n  \"capacidad\": 16000,\r\n  \"tipo\": \"Arena\",\r\n  \"cubierto\": true,\r\n  \"fechaInauguracion\": \"2005-01-01\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/recintos/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "recintos",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/recintos/:id",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"ciudad\": \"ZGZ\",\r\n    \"capacidad\": 10\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/recintos/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "recintos",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/recintos/:id",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/recintos/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "recintos",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "eventos",
+          "item": [
+            {
+              "name": "/eventos",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombre\": \"Concierto Primavera\",\r\n  \"descripcion\": \"Festival de apertura\",\r\n  \"fechaEvento\": \"2026-06-15\",\r\n  \"horaEvento\": \"21:00:00\",\r\n  \"precioEntrada\": 45.0,\r\n  \"aforoMaximo\": 500,\r\n  \"entradasDisponibles\": 500,\r\n  \"cancelado\": false,\r\n  \"presencial\": true,\r\n  \"categoria\": \"Pop\",\r\n  \"usuario\": {\r\n    \"id\": 1\r\n  },\r\n  \"artista\": {\r\n    \"id\": 1\r\n  },\r\n  \"recinto\": {\r\n    \"id\": 1\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/eventos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "eventos"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/eventos",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/eventos",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "eventos"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/eventos/:id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/eventos/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "eventos",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/eventos/cancelados",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/eventos/cancelados",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "eventos",
+                    "cancelados"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/eventos/:id",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombre\": \"Concierto Invierno\",\r\n  \"descripcion\": \"Festival de apertura\",\r\n  \"fechaEvento\": \"2026-06-15\",\r\n  \"horaEvento\": \"21:00:00\",\r\n  \"precioEntrada\": 45.0,\r\n  \"aforoMaximo\": 5020,\r\n  \"entradasDisponibles\": 500,\r\n  \"cancelado\": false,\r\n  \"presencial\": true,\r\n  \"categoria\": \"Pop rock\",\r\n  \"usuario\": {\r\n    \"id\": 1\r\n  },\r\n  \"artista\": {\r\n    \"id\": 1\r\n  },\r\n  \"recinto\": {\r\n    \"id\": 1\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/eventos/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "eventos",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/eventos/:id",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"cancelado\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/eventos/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "eventos",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/eventos/:id",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/usuarios/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "usuarios",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "reservas",
+          "item": [
+            {
+              "name": "/reservas",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"fechaReserva\": \"2026-03-27T18:30:00\",\r\n  \"cantidadEntradas\": 2,\r\n  \"precioTotal\": 90.0,\r\n  \"metodoPago\": \"Tarjeta\",\r\n  \"codigoReserva\": \"RES12345\",\r\n  \"confirmada\": true,\r\n  \"usuario\": {\r\n    \"id\": 1\r\n  },\r\n  \"evento\": {\r\n    \"id\": 1\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/reservas",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "reservas"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/reservas",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombre\": \"Lulu\",\r\n  \"apellidos\": \"Test\",\r\n  \"email\": \"lulu@test.com\",\r\n  \"password\": \"123456\",\r\n  \"telefono\": \"123456789\",\r\n  \"activo\": true,\r\n  \"fechaNacimiento\": \"2000-01-01\",\r\n  \"eventosAsistidos\": 0,\r\n  \"rol\": \"USER\",\r\n  \"saldoCuenta\": 100.0\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/reservas",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "reservas"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/reservas/:id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/reservas/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "reservas",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/reservas/confirmadas",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/reservas/confirmadas",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "reservas",
+                    "confirmadas"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/reservas/:id",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"fechaReserva\": \"2026-03-27T18:30:00\",\r\n  \"cantidadEntradas\": 3,\r\n  \"precioTotal\": 135.0,\r\n  \"metodoPago\": \"PayPal\",\r\n  \"codigoReserva\": \"RES54sdf321\",\r\n  \"confirmada\": true,\r\n  \"usuario\": {\r\n    \"id\": 2\r\n  },\r\n  \"evento\": {\r\n    \"id\": 1\r\n  }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/reservas/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "reservas",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/reservas/:id",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"metodoPago\": \"bizum\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/reservas/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "reservas",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/reservas/:id",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/reservas/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "reservas",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

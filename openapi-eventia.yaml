@@ -1,0 +1,2392 @@
+openapi: 3.0.1
+info:
+  title: Eventia API
+  description: API REST para la gestión de eventos, artistas, recintos, usuarios y reservas.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+
+tags:
+  - name: Usuarios
+    description: Operaciones sobre usuarios
+  - name: Artistas
+    description: Operaciones sobre artistas
+  - name: Recintos
+    description: Operaciones sobre recintos
+  - name: Eventos
+    description: Operaciones sobre eventos
+  - name: Reservas
+    description: Operaciones sobre reservas
+
+paths:
+
+  /usuarios:
+    get:
+      tags: [Usuarios]
+      summary: Obtener todos los usuarios
+      description: Filtra opcionalmente por nombre, email y rol.
+      parameters:
+        - name: nombre
+          in: query
+          required: false
+          description: Filtra por nombre del usuario.
+          schema:
+            type: string
+          example: Lucia
+        - name: email
+          in: query
+          required: false
+          description: Filtra por email del usuario.
+          schema:
+            type: string
+          example: lucia@gmail.com
+        - name: rol
+          in: query
+          required: false
+          description: Filtra por rol del usuario.
+          schema:
+            type: string
+          example: ADMIN
+      responses:
+        '200':
+          description: Lista de usuarios obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+              examples:
+                sinFiltros:
+                  summary: Consulta sin filtros
+                  value:
+                    - id: 1
+                      nombre: Lucia
+                      apellidos: Perez Gomez
+                      email: lucia@gmail.com
+                      password: secreto12
+                      telefono: '600123123'
+                      activo: true
+                      fechaNacimiento: '1999-05-12'
+                      eventosAsistidos: 4
+                      rol: USER
+                      saldoCuenta: 35.5
+                    - id: 2
+                      nombre: Carlos
+                      apellidos: Lopez Martinez
+                      email: carlos@gmail.com
+                      password: clave5678
+                      telefono: '611222333'
+                      activo: true
+                      fechaNacimiento: '1990-08-20'
+                      eventosAsistidos: 10
+                      rol: ADMIN
+                      saldoCuenta: 120.0
+                filtradoPorRol:
+                  summary: Consulta filtrada por rol ADMIN
+                  value:
+                    - id: 2
+                      nombre: Carlos
+                      apellidos: Lopez Martinez
+                      email: carlos@gmail.com
+                      password: clave5678
+                      telefono: '611222333'
+                      activo: true
+                      fechaNacimiento: '1990-08-20'
+                      eventosAsistidos: 10
+                      rol: ADMIN
+                      saldoCuenta: 120.0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [Usuarios]
+      summary: Crear un usuario
+      description: Registra un nuevo usuario en el sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+            examples:
+              ejemplo1:
+                summary: Usuario básico
+                value:
+                  nombre: Lucia
+                  apellidos: Perez Gomez
+                  email: lucia@gmail.com
+                  password: secreto12
+                  rol: USER
+              ejemplo2:
+                summary: Usuario completo
+                value:
+                  nombre: Carlos
+                  apellidos: Lopez Martinez
+                  email: carlos@gmail.com
+                  password: clave5678
+                  telefono: '611222333'
+                  activo: true
+                  fechaNacimiento: '1990-08-20'
+                  eventosAsistidos: 0
+                  rol: ADMIN
+                  saldoCuenta: 50.0
+      responses:
+        '201':
+          description: Usuario creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+              examples:
+                ejemplo1:
+                  summary: Usuario básico creado
+                  value:
+                    id: 3
+                    nombre: Lucia
+                    apellidos: Perez Gomez
+                    email: lucia@gmail.com
+                    password: secreto12
+                    activo: false
+                    eventosAsistidos: 0
+                    rol: USER
+                    saldoCuenta: 0.0
+                ejemplo2:
+                  summary: Usuario completo creado
+                  value:
+                    id: 4
+                    nombre: Carlos
+                    apellidos: Lopez Martinez
+                    email: carlos@gmail.com
+                    password: clave5678
+                    telefono: '611222333'
+                    activo: true
+                    fechaNacimiento: '1990-08-20'
+                    eventosAsistidos: 0
+                    rol: ADMIN
+                    saldoCuenta: 50.0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /usuarios/{id}:
+    get:
+      tags: [Usuarios]
+      summary: Obtener usuario por id
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Usuario obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+              examples:
+                ejemplo1:
+                  summary: Usuario con rol USER
+                  value:
+                    id: 1
+                    nombre: Lucia
+                    apellidos: Perez Gomez
+                    email: lucia@gmail.com
+                    password: secreto12
+                    telefono: '600123123'
+                    activo: true
+                    fechaNacimiento: '1999-05-12'
+                    eventosAsistidos: 4
+                    rol: USER
+                    saldoCuenta: 35.5
+                ejemplo2:
+                  summary: Usuario con rol ADMIN
+                  value:
+                    id: 2
+                    nombre: Carlos
+                    apellidos: Lopez Martinez
+                    email: carlos@gmail.com
+                    password: clave5678
+                    telefono: '611222333'
+                    activo: true
+                    fechaNacimiento: '1990-08-20'
+                    eventosAsistidos: 10
+                    rol: ADMIN
+                    saldoCuenta: 120.0
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [Usuarios]
+      summary: Modificar usuario
+      description: Sustituye completamente los datos de un usuario existente.
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+            examples:
+              ejemplo1:
+                summary: Cambio de rol
+                value:
+                  nombre: Lucia
+                  apellidos: Perez Gomez
+                  email: lucia@gmail.com
+                  password: secreto12
+                  telefono: '600123123'
+                  activo: true
+                  fechaNacimiento: '1999-05-12'
+                  eventosAsistidos: 4
+                  rol: ADMIN
+                  saldoCuenta: 35.5
+              ejemplo2:
+                summary: Actualización de saldo
+                value:
+                  nombre: Carlos
+                  apellidos: Lopez Martinez
+                  email: carlos@gmail.com
+                  password: clave5678
+                  telefono: '611222333'
+                  activo: true
+                  fechaNacimiento: '1990-08-20'
+                  eventosAsistidos: 11
+                  rol: ADMIN
+                  saldoCuenta: 200.0
+      responses:
+        '200':
+          description: Usuario modificado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+              examples:
+                ejemplo1:
+                  summary: Usuario con rol actualizado
+                  value:
+                    id: 1
+                    nombre: Lucia
+                    apellidos: Perez Gomez
+                    email: lucia@gmail.com
+                    password: secreto12
+                    telefono: '600123123'
+                    activo: true
+                    fechaNacimiento: '1999-05-12'
+                    eventosAsistidos: 4
+                    rol: ADMIN
+                    saldoCuenta: 35.5
+                ejemplo2:
+                  summary: Usuario con saldo actualizado
+                  value:
+                    id: 2
+                    nombre: Carlos
+                    apellidos: Lopez Martinez
+                    email: carlos@gmail.com
+                    password: clave5678
+                    telefono: '611222333'
+                    activo: true
+                    fechaNacimiento: '1990-08-20'
+                    eventosAsistidos: 11
+                    rol: ADMIN
+                    saldoCuenta: 200.0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    patch:
+      tags: [Usuarios]
+      summary: Modificar parcialmente un usuario
+      description: Actualiza uno o varios campos de un usuario existente.
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+            examples:
+              ejemplo1:
+                summary: Cambiar el rol
+                value:
+                  rol: ADMIN
+              ejemplo2:
+                summary: Desactivar usuario y poner saldo a cero
+                value:
+                  activo: false
+                  saldoCuenta: 0.0
+      responses:
+        '200':
+          description: Usuario actualizado parcialmente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+              examples:
+                ejemplo1:
+                  summary: Usuario con rol actualizado
+                  value:
+                    id: 1
+                    nombre: Lucia
+                    apellidos: Perez Gomez
+                    email: lucia@gmail.com
+                    password: secreto12
+                    telefono: '600123123'
+                    activo: true
+                    fechaNacimiento: '1999-05-12'
+                    eventosAsistidos: 4
+                    rol: ADMIN
+                    saldoCuenta: 35.5
+                ejemplo2:
+                  summary: Usuario desactivado
+                  value:
+                    id: 2
+                    nombre: Carlos
+                    apellidos: Lopez Martinez
+                    email: carlos@gmail.com
+                    password: clave5678
+                    telefono: '611222333'
+                    activo: false
+                    fechaNacimiento: '1990-08-20'
+                    eventosAsistidos: 10
+                    rol: ADMIN
+                    saldoCuenta: 0.0
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [Usuarios]
+      summary: Eliminar usuario
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: Usuario eliminado correctamente
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /artistas:
+    get:
+      tags: [Artistas]
+      summary: Obtener todos los artistas
+      description: Filtra opcionalmente por nombreArtistico, generoMusical y activo.
+      parameters:
+        - name: nombreArtistico
+          in: query
+          required: false
+          description: Filtra por nombre artístico.
+          schema:
+            type: string
+          example: Aitana
+        - name: generoMusical
+          in: query
+          required: false
+          description: Filtra por género musical.
+          schema:
+            type: string
+          example: Pop
+        - name: activo
+          in: query
+          required: false
+          description: Filtra por si el artista está activo.
+          schema:
+            type: boolean
+          example: true
+      responses:
+        '200':
+          description: Lista de artistas obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artista'
+              examples:
+                sinFiltros:
+                  summary: Consulta sin filtros
+                  value:
+                    - id: 1
+                      nombreArtistico: Aitana
+                      nombreReal: Aitana Ocaña Morales
+                      generoMusical: Pop
+                      fechaNacimiento: '1999-06-27'
+                      activo: true
+                      cache: 5000.0
+                      eventosRealizados: 20
+                    - id: 2
+                      nombreArtistico: Bad Bunny
+                      nombreReal: Benito Antonio Martinez
+                      generoMusical: Reggaeton
+                      fechaNacimiento: '1994-03-10'
+                      activo: true
+                      cache: 15000.0
+                      eventosRealizados: 50
+                filtradoPorGenero:
+                  summary: Consulta filtrada por género Pop
+                  value:
+                    - id: 1
+                      nombreArtistico: Aitana
+                      nombreReal: Aitana Ocaña Morales
+                      generoMusical: Pop
+                      fechaNacimiento: '1999-06-27'
+                      activo: true
+                      cache: 5000.0
+                      eventosRealizados: 20
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [Artistas]
+      summary: Crear artista
+      description: Registra un nuevo artista.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artista'
+            examples:
+              ejemplo1:
+                summary: Artista pop
+                value:
+                  nombreArtistico: Aitana
+                  nombreReal: Aitana Ocaña Morales
+                  generoMusical: Pop
+                  fechaNacimiento: '1999-06-27'
+                  activo: true
+                  cache: 5000.0
+                  eventosRealizados: 20
+              ejemplo2:
+                summary: Artista reggaeton
+                value:
+                  nombreArtistico: Bad Bunny
+                  nombreReal: Benito Antonio Martinez
+                  generoMusical: Reggaeton
+                  fechaNacimiento: '1994-03-10'
+                  activo: true
+                  cache: 15000.0
+                  eventosRealizados: 50
+      responses:
+        '201':
+          description: Artista creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artista'
+              examples:
+                ejemplo1:
+                  summary: Artista pop creado
+                  value:
+                    id: 1
+                    nombreArtistico: Aitana
+                    nombreReal: Aitana Ocaña Morales
+                    generoMusical: Pop
+                    fechaNacimiento: '1999-06-27'
+                    activo: true
+                    cache: 5000.0
+                    eventosRealizados: 20
+                ejemplo2:
+                  summary: Artista reggaeton creado
+                  value:
+                    id: 2
+                    nombreArtistico: Bad Bunny
+                    nombreReal: Benito Antonio Martinez
+                    generoMusical: Reggaeton
+                    fechaNacimiento: '1994-03-10'
+                    activo: true
+                    cache: 15000.0
+                    eventosRealizados: 50
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /artistas/{id}:
+    get:
+      tags: [Artistas]
+      summary: Obtener artista por id
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Artista obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artista'
+              examples:
+                ejemplo1:
+                  summary: Artista pop
+                  value:
+                    id: 1
+                    nombreArtistico: Aitana
+                    nombreReal: Aitana Ocaña Morales
+                    generoMusical: Pop
+                    fechaNacimiento: '1999-06-27'
+                    activo: true
+                    cache: 5000.0
+                    eventosRealizados: 20
+                ejemplo2:
+                  summary: Artista reggaeton
+                  value:
+                    id: 2
+                    nombreArtistico: Bad Bunny
+                    nombreReal: Benito Antonio Martinez
+                    generoMusical: Reggaeton
+                    fechaNacimiento: '1994-03-10'
+                    activo: true
+                    cache: 15000.0
+                    eventosRealizados: 50
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [Artistas]
+      summary: Modificar artista
+      description: Sustituye completamente los datos de un artista existente.
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artista'
+            examples:
+              ejemplo1:
+                summary: Actualizar género y caché
+                value:
+                  nombreArtistico: Aitana
+                  nombreReal: Aitana Ocaña Morales
+                  generoMusical: Pop latino
+                  fechaNacimiento: '1999-06-27'
+                  activo: true
+                  cache: 8000.0
+                  eventosRealizados: 25
+              ejemplo2:
+                summary: Desactivar artista
+                value:
+                  nombreArtistico: Bad Bunny
+                  nombreReal: Benito Antonio Martinez
+                  generoMusical: Latin Trap
+                  fechaNacimiento: '1994-03-10'
+                  activo: false
+                  cache: 15000.0
+                  eventosRealizados: 50
+      responses:
+        '200':
+          description: Artista modificado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artista'
+              examples:
+                ejemplo1:
+                  summary: Artista actualizado
+                  value:
+                    id: 1
+                    nombreArtistico: Aitana
+                    nombreReal: Aitana Ocaña Morales
+                    generoMusical: Pop latino
+                    fechaNacimiento: '1999-06-27'
+                    activo: true
+                    cache: 8000.0
+                    eventosRealizados: 25
+                ejemplo2:
+                  summary: Artista desactivado
+                  value:
+                    id: 2
+                    nombreArtistico: Bad Bunny
+                    nombreReal: Benito Antonio Martinez
+                    generoMusical: Latin Trap
+                    fechaNacimiento: '1994-03-10'
+                    activo: false
+                    cache: 15000.0
+                    eventosRealizados: 50
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    patch:
+      tags: [Artistas]
+      summary: Modificar parcialmente un artista
+      description: Actualiza uno o varios campos de un artista existente.
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+            examples:
+              ejemplo1:
+                summary: Cambiar género musical
+                value:
+                  generoMusical: Pop latino
+              ejemplo2:
+                summary: Desactivar artista
+                value:
+                  activo: false
+      responses:
+        '200':
+          description: Artista actualizado parcialmente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artista'
+              examples:
+                ejemplo1:
+                  summary: Género actualizado
+                  value:
+                    id: 1
+                    nombreArtistico: Aitana
+                    nombreReal: Aitana Ocaña Morales
+                    generoMusical: Pop latino
+                    fechaNacimiento: '1999-06-27'
+                    activo: true
+                    cache: 5000.0
+                    eventosRealizados: 20
+                ejemplo2:
+                  summary: Artista desactivado
+                  value:
+                    id: 2
+                    nombreArtistico: Bad Bunny
+                    nombreReal: Benito Antonio Martinez
+                    generoMusical: Reggaeton
+                    fechaNacimiento: '1994-03-10'
+                    activo: false
+                    cache: 15000.0
+                    eventosRealizados: 50
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [Artistas]
+      summary: Eliminar artista
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: Artista eliminado correctamente
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /artistas/activos:
+    get:
+      tags: [Artistas]
+      summary: Obtener artistas activos
+      description: Devuelve los artistas con activo = true mediante una consulta JPQL.
+      responses:
+        '200':
+          description: Lista de artistas activos obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artista'
+              examples:
+                ejemplo1:
+                  summary: Un artista activo
+                  value:
+                    - id: 1
+                      nombreArtistico: Aitana
+                      nombreReal: Aitana Ocaña Morales
+                      generoMusical: Pop
+                      fechaNacimiento: '1999-06-27'
+                      activo: true
+                      cache: 5000.0
+                      eventosRealizados: 20
+                ejemplo2:
+                  summary: Varios artistas activos
+                  value:
+                    - id: 1
+                      nombreArtistico: Aitana
+                      nombreReal: Aitana Ocaña Morales
+                      generoMusical: Pop
+                      fechaNacimiento: '1999-06-27'
+                      activo: true
+                      cache: 5000.0
+                      eventosRealizados: 20
+                    - id: 3
+                      nombreArtistico: Rosalia
+                      nombreReal: Rosalía Vila Tobella
+                      generoMusical: Flamenco Pop
+                      fechaNacimiento: '1992-09-25'
+                      activo: true
+                      cache: 10000.0
+                      eventosRealizados: 35
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /recintos:
+    get:
+      tags: [Recintos]
+      summary: Obtener todos los recintos
+      description: Filtra opcionalmente por nombre, ciudad y cubierto.
+      parameters:
+        - name: nombre
+          in: query
+          required: false
+          description: Filtra por nombre del recinto.
+          schema:
+            type: string
+          example: Pabellón Príncipe Felipe
+        - name: ciudad
+          in: query
+          required: false
+          description: Filtra por ciudad del recinto.
+          schema:
+            type: string
+          example: Zaragoza
+        - name: cubierto
+          in: query
+          required: false
+          description: Filtra por si el recinto es cubierto.
+          schema:
+            type: boolean
+          example: true
+      responses:
+        '200':
+          description: Lista de recintos obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recinto'
+              examples:
+                sinFiltros:
+                  summary: Consulta sin filtros
+                  value:
+                    - id: 1
+                      nombre: Pabellón Príncipe Felipe
+                      direccion: Avenida Cesáreo Alierta 120
+                      ciudad: Zaragoza
+                      capacidad: 10000
+                      cubierto: true
+                      precioAlquiler: 25000.0
+                      eventosCelebrados: 150
+                      fechaInauguracion: '1990-01-01'
+                    - id: 2
+                      nombre: Estadio de La Romareda
+                      direccion: Calle de Constancia s/n
+                      ciudad: Zaragoza
+                      capacidad: 34000
+                      cubierto: false
+                      precioAlquiler: 60000.0
+                      eventosCelebrados: 300
+                      fechaInauguracion: '1957-05-05'
+                filtradoPorCiudad:
+                  summary: Consulta filtrada por ciudad Zaragoza y cubierto true
+                  value:
+                    - id: 1
+                      nombre: Pabellón Príncipe Felipe
+                      direccion: Avenida Cesáreo Alierta 120
+                      ciudad: Zaragoza
+                      capacidad: 10000
+                      cubierto: true
+                      precioAlquiler: 25000.0
+                      eventosCelebrados: 150
+                      fechaInauguracion: '1990-01-01'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [Recintos]
+      summary: Crear recinto
+      description: Registra un nuevo recinto.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recinto'
+            examples:
+              ejemplo1:
+                summary: Recinto cubierto
+                value:
+                  nombre: Pabellón Príncipe Felipe
+                  direccion: Avenida Cesáreo Alierta 120
+                  ciudad: Zaragoza
+                  capacidad: 10000
+                  cubierto: true
+                  precioAlquiler: 25000.0
+                  eventosCelebrados: 0
+                  fechaInauguracion: '1990-01-01'
+              ejemplo2:
+                summary: Recinto al aire libre
+                value:
+                  nombre: Estadio de La Romareda
+                  direccion: Calle de Constancia s/n
+                  ciudad: Zaragoza
+                  capacidad: 34000
+                  cubierto: false
+                  precioAlquiler: 60000.0
+                  eventosCelebrados: 0
+                  fechaInauguracion: '1957-05-05'
+      responses:
+        '201':
+          description: Recinto creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recinto'
+              examples:
+                ejemplo1:
+                  summary: Recinto cubierto creado
+                  value:
+                    id: 1
+                    nombre: Pabellón Príncipe Felipe
+                    direccion: Avenida Cesáreo Alierta 120
+                    ciudad: Zaragoza
+                    capacidad: 10000
+                    cubierto: true
+                    precioAlquiler: 25000.0
+                    eventosCelebrados: 0
+                    fechaInauguracion: '1990-01-01'
+                ejemplo2:
+                  summary: Recinto al aire libre creado
+                  value:
+                    id: 2
+                    nombre: Estadio de La Romareda
+                    direccion: Calle de Constancia s/n
+                    ciudad: Zaragoza
+                    capacidad: 34000
+                    cubierto: false
+                    precioAlquiler: 60000.0
+                    eventosCelebrados: 0
+                    fechaInauguracion: '1957-05-05'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /recintos/{id}:
+    get:
+      tags: [Recintos]
+      summary: Obtener recinto por id
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Recinto obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recinto'
+              examples:
+                ejemplo1:
+                  summary: Recinto cubierto
+                  value:
+                    id: 1
+                    nombre: Pabellón Príncipe Felipe
+                    direccion: Avenida Cesáreo Alierta 120
+                    ciudad: Zaragoza
+                    capacidad: 10000
+                    cubierto: true
+                    precioAlquiler: 25000.0
+                    eventosCelebrados: 150
+                    fechaInauguracion: '1990-01-01'
+                ejemplo2:
+                  summary: Recinto al aire libre
+                  value:
+                    id: 2
+                    nombre: Estadio de La Romareda
+                    direccion: Calle de Constancia s/n
+                    ciudad: Zaragoza
+                    capacidad: 34000
+                    cubierto: false
+                    precioAlquiler: 60000.0
+                    eventosCelebrados: 300
+                    fechaInauguracion: '1957-05-05'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [Recintos]
+      summary: Modificar recinto
+      description: Sustituye completamente los datos de un recinto existente.
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recinto'
+            examples:
+              ejemplo1:
+                summary: Actualizar capacidad y precio
+                value:
+                  nombre: Pabellón Príncipe Felipe
+                  direccion: Avenida Cesáreo Alierta 120
+                  ciudad: Zaragoza
+                  capacidad: 12000
+                  cubierto: true
+                  precioAlquiler: 28000.0
+                  eventosCelebrados: 155
+                  fechaInauguracion: '1990-01-01'
+              ejemplo2:
+                summary: Actualizar precio y eventos celebrados
+                value:
+                  nombre: Estadio de La Romareda
+                  direccion: Calle de Constancia s/n
+                  ciudad: Zaragoza
+                  capacidad: 34000
+                  cubierto: false
+                  precioAlquiler: 65000.0
+                  eventosCelebrados: 302
+                  fechaInauguracion: '1957-05-05'
+      responses:
+        '200':
+          description: Recinto modificado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recinto'
+              examples:
+                ejemplo1:
+                  summary: Recinto con capacidad actualizada
+                  value:
+                    id: 1
+                    nombre: Pabellón Príncipe Felipe
+                    direccion: Avenida Cesáreo Alierta 120
+                    ciudad: Zaragoza
+                    capacidad: 12000
+                    cubierto: true
+                    precioAlquiler: 28000.0
+                    eventosCelebrados: 155
+                    fechaInauguracion: '1990-01-01'
+                ejemplo2:
+                  summary: Recinto con precio actualizado
+                  value:
+                    id: 2
+                    nombre: Estadio de La Romareda
+                    direccion: Calle de Constancia s/n
+                    ciudad: Zaragoza
+                    capacidad: 34000
+                    cubierto: false
+                    precioAlquiler: 65000.0
+                    eventosCelebrados: 302
+                    fechaInauguracion: '1957-05-05'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    patch:
+      tags: [Recintos]
+      summary: Modificar parcialmente un recinto
+      description: Actualiza uno o varios campos de un recinto existente.
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+            examples:
+              ejemplo1:
+                summary: Cambiar ciudad
+                value:
+                  ciudad: Huesca
+              ejemplo2:
+                summary: Cambiar estado de cubierto y precio
+                value:
+                  cubierto: false
+                  precioAlquiler: 18000.0
+      responses:
+        '200':
+          description: Recinto actualizado parcialmente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recinto'
+              examples:
+                ejemplo1:
+                  summary: Recinto con ciudad actualizada
+                  value:
+                    id: 1
+                    nombre: Pabellón Príncipe Felipe
+                    direccion: Avenida Cesáreo Alierta 120
+                    ciudad: Huesca
+                    capacidad: 10000
+                    cubierto: true
+                    precioAlquiler: 25000.0
+                    eventosCelebrados: 150
+                    fechaInauguracion: '1990-01-01'
+                ejemplo2:
+                  summary: Recinto con precio actualizado
+                  value:
+                    id: 1
+                    nombre: Pabellón Príncipe Felipe
+                    direccion: Avenida Cesáreo Alierta 120
+                    ciudad: Zaragoza
+                    capacidad: 10000
+                    cubierto: false
+                    precioAlquiler: 18000.0
+                    eventosCelebrados: 150
+                    fechaInauguracion: '1990-01-01'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [Recintos]
+      summary: Eliminar recinto
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: Recinto eliminado correctamente
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /eventos:
+    get:
+      tags: [Eventos]
+      summary: Obtener todos los eventos
+      description: Filtra opcionalmente por nombre, categoria y cancelado.
+      parameters:
+        - name: nombre
+          in: query
+          required: false
+          description: Filtra por nombre del evento.
+          schema:
+            type: string
+          example: Festival de Primavera
+        - name: categoria
+          in: query
+          required: false
+          description: Filtra por categoría del evento.
+          schema:
+            type: string
+          example: Festival
+        - name: cancelado
+          in: query
+          required: false
+          description: Filtra por si el evento está cancelado.
+          schema:
+            type: boolean
+          example: false
+      responses:
+        '200':
+          description: Lista de eventos obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Evento'
+              examples:
+                sinFiltros:
+                  summary: Consulta sin filtros
+                  value:
+                    - id: 1
+                      nombre: Festival de Primavera
+                      descripcion: Festival de música en directo
+                      fechaEvento: '2026-06-20'
+                      horaEvento: '21:00:00'
+                      precioEntrada: 45.5
+                      aforoMaximo: 12000
+                      entradasDisponibles: 8500
+                      cancelado: false
+                      presencial: true
+                      categoria: Festival
+                      usuario:
+                        id: 1
+                      artista:
+                        id: 1
+                      recinto:
+                        id: 1
+                    - id: 2
+                      nombre: Concierto Acústico
+                      descripcion: Noche íntima de música acústica
+                      fechaEvento: '2026-07-15'
+                      horaEvento: '20:00:00'
+                      precioEntrada: 25.0
+                      aforoMaximo: 500
+                      entradasDisponibles: 200
+                      cancelado: false
+                      presencial: true
+                      categoria: Concierto
+                      usuario:
+                        id: 2
+                      artista:
+                        id: 2
+                      recinto:
+                        id: 2
+                filtradoPorCategoria:
+                  summary: Consulta filtrada por categoría Festival
+                  value:
+                    - id: 1
+                      nombre: Festival de Primavera
+                      descripcion: Festival de música en directo
+                      fechaEvento: '2026-06-20'
+                      horaEvento: '21:00:00'
+                      precioEntrada: 45.5
+                      aforoMaximo: 12000
+                      entradasDisponibles: 8500
+                      cancelado: false
+                      presencial: true
+                      categoria: Festival
+                      usuario:
+                        id: 1
+                      artista:
+                        id: 1
+                      recinto:
+                        id: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [Eventos]
+      summary: Crear evento
+      description: Registra un nuevo evento.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+            examples:
+              ejemplo1:
+                summary: Festival
+                value:
+                  nombre: Festival de Primavera
+                  descripcion: Festival de música en directo
+                  fechaEvento: '2026-06-20'
+                  horaEvento: '21:00:00'
+                  precioEntrada: 45.5
+                  aforoMaximo: 12000
+                  entradasDisponibles: 12000
+                  cancelado: false
+                  presencial: true
+                  categoria: Festival
+                  usuario:
+                    id: 1
+                  artista:
+                    id: 1
+                  recinto:
+                    id: 1
+              ejemplo2:
+                summary: Concierto
+                value:
+                  nombre: Concierto Acústico
+                  descripcion: Noche íntima de música acústica
+                  fechaEvento: '2026-07-15'
+                  horaEvento: '20:00:00'
+                  precioEntrada: 25.0
+                  aforoMaximo: 500
+                  entradasDisponibles: 500
+                  cancelado: false
+                  presencial: true
+                  categoria: Concierto
+                  usuario:
+                    id: 2
+                  artista:
+                    id: 2
+                  recinto:
+                    id: 2
+      responses:
+        '201':
+          description: Evento creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+              examples:
+                ejemplo1:
+                  summary: Festival creado
+                  value:
+                    id: 1
+                    nombre: Festival de Primavera
+                    descripcion: Festival de música en directo
+                    fechaEvento: '2026-06-20'
+                    horaEvento: '21:00:00'
+                    precioEntrada: 45.5
+                    aforoMaximo: 12000
+                    entradasDisponibles: 12000
+                    cancelado: false
+                    presencial: true
+                    categoria: Festival
+                    usuario:
+                      id: 1
+                    artista:
+                      id: 1
+                    recinto:
+                      id: 1
+                ejemplo2:
+                  summary: Concierto creado
+                  value:
+                    id: 2
+                    nombre: Concierto Acústico
+                    descripcion: Noche íntima de música acústica
+                    fechaEvento: '2026-07-15'
+                    horaEvento: '20:00:00'
+                    precioEntrada: 25.0
+                    aforoMaximo: 500
+                    entradasDisponibles: 500
+                    cancelado: false
+                    presencial: true
+                    categoria: Concierto
+                    usuario:
+                      id: 2
+                    artista:
+                      id: 2
+                    recinto:
+                      id: 2
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /eventos/{id}:
+    get:
+      tags: [Eventos]
+      summary: Obtener evento por id
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Evento obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+              examples:
+                ejemplo1:
+                  summary: Festival
+                  value:
+                    id: 1
+                    nombre: Festival de Primavera
+                    descripcion: Festival de música en directo
+                    fechaEvento: '2026-06-20'
+                    horaEvento: '21:00:00'
+                    precioEntrada: 45.5
+                    aforoMaximo: 12000
+                    entradasDisponibles: 8500
+                    cancelado: false
+                    presencial: true
+                    categoria: Festival
+                    usuario:
+                      id: 1
+                    artista:
+                      id: 1
+                    recinto:
+                      id: 1
+                ejemplo2:
+                  summary: Concierto
+                  value:
+                    id: 2
+                    nombre: Concierto Acústico
+                    descripcion: Noche íntima de música acústica
+                    fechaEvento: '2026-07-15'
+                    horaEvento: '20:00:00'
+                    precioEntrada: 25.0
+                    aforoMaximo: 500
+                    entradasDisponibles: 200
+                    cancelado: false
+                    presencial: true
+                    categoria: Concierto
+                    usuario:
+                      id: 2
+                    artista:
+                      id: 2
+                    recinto:
+                      id: 2
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [Eventos]
+      summary: Modificar evento
+      description: Sustituye completamente los datos de un evento existente.
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+            examples:
+              ejemplo1:
+                summary: Actualizar precio
+                value:
+                  nombre: Festival de Primavera
+                  descripcion: Festival de música en directo con nuevo cartel
+                  fechaEvento: '2026-06-20'
+                  horaEvento: '21:00:00'
+                  precioEntrada: 55.0
+                  aforoMaximo: 12000
+                  entradasDisponibles: 8500
+                  cancelado: false
+                  presencial: true
+                  categoria: Festival
+                  usuario:
+                    id: 1
+                  artista:
+                    id: 1
+                  recinto:
+                    id: 1
+              ejemplo2:
+                summary: Actualizar hora
+                value:
+                  nombre: Concierto Acústico
+                  descripcion: Noche íntima de música acústica
+                  fechaEvento: '2026-07-15'
+                  horaEvento: '19:00:00'
+                  precioEntrada: 25.0
+                  aforoMaximo: 500
+                  entradasDisponibles: 200
+                  cancelado: false
+                  presencial: true
+                  categoria: Concierto
+                  usuario:
+                    id: 2
+                  artista:
+                    id: 2
+                  recinto:
+                    id: 2
+      responses:
+        '200':
+          description: Evento modificado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+              examples:
+                ejemplo1:
+                  summary: Evento con precio actualizado
+                  value:
+                    id: 1
+                    nombre: Festival de Primavera
+                    descripcion: Festival de música en directo con nuevo cartel
+                    fechaEvento: '2026-06-20'
+                    horaEvento: '21:00:00'
+                    precioEntrada: 55.0
+                    aforoMaximo: 12000
+                    entradasDisponibles: 8500
+                    cancelado: false
+                    presencial: true
+                    categoria: Festival
+                    usuario:
+                      id: 1
+                    artista:
+                      id: 1
+                    recinto:
+                      id: 1
+                ejemplo2:
+                  summary: Evento con hora actualizada
+                  value:
+                    id: 2
+                    nombre: Concierto Acústico
+                    descripcion: Noche íntima de música acústica
+                    fechaEvento: '2026-07-15'
+                    horaEvento: '19:00:00'
+                    precioEntrada: 25.0
+                    aforoMaximo: 500
+                    entradasDisponibles: 200
+                    cancelado: false
+                    presencial: true
+                    categoria: Concierto
+                    usuario:
+                      id: 2
+                    artista:
+                      id: 2
+                    recinto:
+                      id: 2
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    patch:
+      tags: [Eventos]
+      summary: Modificar parcialmente un evento
+      description: Actualiza uno o varios campos de un evento existente.
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+            examples:
+              ejemplo1:
+                summary: Cancelar evento
+                value:
+                  cancelado: true
+              ejemplo2:
+                summary: Actualizar precio y entradas disponibles
+                value:
+                  precioEntrada: 39.9
+                  entradasDisponibles: 7000
+      responses:
+        '200':
+          description: Evento actualizado parcialmente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+              examples:
+                ejemplo1:
+                  summary: Evento cancelado
+                  value:
+                    id: 1
+                    nombre: Festival de Primavera
+                    descripcion: Festival de música en directo
+                    fechaEvento: '2026-06-20'
+                    horaEvento: '21:00:00'
+                    precioEntrada: 45.5
+                    aforoMaximo: 12000
+                    entradasDisponibles: 8500
+                    cancelado: true
+                    presencial: true
+                    categoria: Festival
+                    usuario:
+                      id: 1
+                    artista:
+                      id: 1
+                    recinto:
+                      id: 1
+                ejemplo2:
+                  summary: Evento con precio actualizado
+                  value:
+                    id: 1
+                    nombre: Festival de Primavera
+                    descripcion: Festival de música en directo
+                    fechaEvento: '2026-06-20'
+                    horaEvento: '21:00:00'
+                    precioEntrada: 39.9
+                    aforoMaximo: 12000
+                    entradasDisponibles: 7000
+                    cancelado: false
+                    presencial: true
+                    categoria: Festival
+                    usuario:
+                      id: 1
+                    artista:
+                      id: 1
+                    recinto:
+                      id: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [Eventos]
+      summary: Eliminar evento
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: Evento eliminado correctamente
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /eventos/cancelados:
+    get:
+      tags: [Eventos]
+      summary: Obtener eventos cancelados
+      description: Devuelve los eventos con cancelado = true mediante una consulta JPQL.
+      responses:
+        '200':
+          description: Lista de eventos cancelados obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Evento'
+              examples:
+                ejemplo1:
+                  summary: Un evento cancelado
+                  value:
+                    - id: 3
+                      nombre: Macrofestival Verano
+                      descripcion: Cancelado por causas meteorológicas
+                      fechaEvento: '2026-08-01'
+                      horaEvento: '18:00:00'
+                      precioEntrada: 60.0
+                      aforoMaximo: 50000
+                      entradasDisponibles: 30000
+                      cancelado: true
+                      presencial: true
+                      categoria: Festival
+                      usuario:
+                        id: 1
+                      artista:
+                        id: 3
+                      recinto:
+                        id: 2
+                ejemplo2:
+                  summary: Varios eventos cancelados
+                  value:
+                    - id: 3
+                      nombre: Macrofestival Verano
+                      descripcion: Cancelado por causas meteorológicas
+                      fechaEvento: '2026-08-01'
+                      horaEvento: '18:00:00'
+                      precioEntrada: 60.0
+                      aforoMaximo: 50000
+                      entradasDisponibles: 30000
+                      cancelado: true
+                      presencial: true
+                      categoria: Festival
+                      usuario:
+                        id: 1
+                      artista:
+                        id: 3
+                      recinto:
+                        id: 2
+                    - id: 5
+                      nombre: Concierto Privado
+                      descripcion: Evento privado cancelado
+                      fechaEvento: '2026-09-10'
+                      horaEvento: '22:00:00'
+                      precioEntrada: 80.0
+                      aforoMaximo: 200
+                      entradasDisponibles: 50
+                      cancelado: true
+                      presencial: true
+                      categoria: Privado
+                      usuario:
+                        id: 2
+                      artista:
+                        id: 1
+                      recinto:
+                        id: 1
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /reservas:
+    get:
+      tags: [Reservas]
+      summary: Obtener todas las reservas
+      description: Filtra opcionalmente por metodoPago, codigoReserva y confirmada.
+      parameters:
+        - name: metodoPago
+          in: query
+          required: false
+          description: Filtra por método de pago.
+          schema:
+            type: string
+          example: tarjeta
+        - name: codigoReserva
+          in: query
+          required: false
+          description: Filtra por código de reserva.
+          schema:
+            type: string
+          example: RSV-2026-001
+        - name: confirmada
+          in: query
+          required: false
+          description: Filtra por si la reserva está confirmada.
+          schema:
+            type: boolean
+          example: true
+      responses:
+        '200':
+          description: Lista de reservas obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reserva'
+              examples:
+                sinFiltros:
+                  summary: Consulta sin filtros
+                  value:
+                    - id: 1
+                      fechaReserva: '2026-04-01T18:30:00'
+                      cantidadEntradas: 2
+                      precioTotal: 91.0
+                      metodoPago: tarjeta
+                      codigoReserva: RSV-2026-001
+                      confirmada: true
+                      usuario:
+                        id: 1
+                      evento:
+                        id: 1
+                    - id: 2
+                      fechaReserva: '2026-04-05T10:00:00'
+                      cantidadEntradas: 4
+                      precioTotal: 100.0
+                      metodoPago: bizum
+                      codigoReserva: RSV-2026-002
+                      confirmada: false
+                      usuario:
+                        id: 2
+                      evento:
+                        id: 2
+                filtradoPorMetodoPago:
+                  summary: Consulta filtrada por método de pago tarjeta
+                  value:
+                    - id: 1
+                      fechaReserva: '2026-04-01T18:30:00'
+                      cantidadEntradas: 2
+                      precioTotal: 91.0
+                      metodoPago: tarjeta
+                      codigoReserva: RSV-2026-001
+                      confirmada: true
+                      usuario:
+                        id: 1
+                      evento:
+                        id: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags: [Reservas]
+      summary: Crear reserva
+      description: Registra una nueva reserva.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+            examples:
+              ejemplo1:
+                summary: Reserva con tarjeta
+                value:
+                  fechaReserva: '2026-04-01T18:30:00'
+                  cantidadEntradas: 2
+                  precioTotal: 91.0
+                  metodoPago: tarjeta
+                  codigoReserva: RSV-2026-001
+                  confirmada: true
+                  usuario:
+                    id: 1
+                  evento:
+                    id: 1
+              ejemplo2:
+                summary: Reserva con Bizum
+                value:
+                  fechaReserva: '2026-04-05T10:00:00'
+                  cantidadEntradas: 4
+                  precioTotal: 100.0
+                  metodoPago: bizum
+                  codigoReserva: RSV-2026-002
+                  confirmada: false
+                  usuario:
+                    id: 2
+                  evento:
+                    id: 2
+      responses:
+        '201':
+          description: Reserva creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+              examples:
+                ejemplo1:
+                  summary: Reserva con tarjeta creada
+                  value:
+                    id: 1
+                    fechaReserva: '2026-04-01T18:30:00'
+                    cantidadEntradas: 2
+                    precioTotal: 91.0
+                    metodoPago: tarjeta
+                    codigoReserva: RSV-2026-001
+                    confirmada: true
+                    usuario:
+                      id: 1
+                    evento:
+                      id: 1
+                ejemplo2:
+                  summary: Reserva con Bizum creada
+                  value:
+                    id: 2
+                    fechaReserva: '2026-04-05T10:00:00'
+                    cantidadEntradas: 4
+                    precioTotal: 100.0
+                    metodoPago: bizum
+                    codigoReserva: RSV-2026-002
+                    confirmada: false
+                    usuario:
+                      id: 2
+                    evento:
+                      id: 2
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /reservas/{id}:
+    get:
+      tags: [Reservas]
+      summary: Obtener reserva por id
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Reserva obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+              examples:
+                ejemplo1:
+                  summary: Reserva confirmada
+                  value:
+                    id: 1
+                    fechaReserva: '2026-04-01T18:30:00'
+                    cantidadEntradas: 2
+                    precioTotal: 91.0
+                    metodoPago: tarjeta
+                    codigoReserva: RSV-2026-001
+                    confirmada: true
+                    usuario:
+                      id: 1
+                    evento:
+                      id: 1
+                ejemplo2:
+                  summary: Reserva pendiente
+                  value:
+                    id: 2
+                    fechaReserva: '2026-04-05T10:00:00'
+                    cantidadEntradas: 4
+                    precioTotal: 100.0
+                    metodoPago: bizum
+                    codigoReserva: RSV-2026-002
+                    confirmada: false
+                    usuario:
+                      id: 2
+                    evento:
+                      id: 2
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags: [Reservas]
+      summary: Modificar reserva
+      description: Sustituye completamente los datos de una reserva existente.
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reserva'
+            examples:
+              ejemplo1:
+                summary: Confirmar reserva
+                value:
+                  fechaReserva: '2026-04-05T10:00:00'
+                  cantidadEntradas: 4
+                  precioTotal: 100.0
+                  metodoPago: bizum
+                  codigoReserva: RSV-2026-002
+                  confirmada: true
+                  usuario:
+                    id: 2
+                  evento:
+                    id: 2
+              ejemplo2:
+                summary: Cambiar método de pago
+                value:
+                  fechaReserva: '2026-04-01T18:30:00'
+                  cantidadEntradas: 2
+                  precioTotal: 91.0
+                  metodoPago: efectivo
+                  codigoReserva: RSV-2026-001
+                  confirmada: true
+                  usuario:
+                    id: 1
+                  evento:
+                    id: 1
+      responses:
+        '200':
+          description: Reserva modificada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+              examples:
+                ejemplo1:
+                  summary: Reserva confirmada
+                  value:
+                    id: 2
+                    fechaReserva: '2026-04-05T10:00:00'
+                    cantidadEntradas: 4
+                    precioTotal: 100.0
+                    metodoPago: bizum
+                    codigoReserva: RSV-2026-002
+                    confirmada: true
+                    usuario:
+                      id: 2
+                    evento:
+                      id: 2
+                ejemplo2:
+                  summary: Método de pago actualizado
+                  value:
+                    id: 1
+                    fechaReserva: '2026-04-01T18:30:00'
+                    cantidadEntradas: 2
+                    precioTotal: 91.0
+                    metodoPago: efectivo
+                    codigoReserva: RSV-2026-001
+                    confirmada: true
+                    usuario:
+                      id: 1
+                    evento:
+                      id: 1
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    patch:
+      tags: [Reservas]
+      summary: Modificar parcialmente una reserva
+      description: Actualiza uno o varios campos de una reserva existente.
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+            examples:
+              ejemplo1:
+                summary: Desconfirmar reserva
+                value:
+                  confirmada: false
+              ejemplo2:
+                summary: Cambiar método de pago
+                value:
+                  metodoPago: bizum
+      responses:
+        '200':
+          description: Reserva actualizada parcialmente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+              examples:
+                ejemplo1:
+                  summary: Reserva desconfirmada
+                  value:
+                    id: 1
+                    fechaReserva: '2026-04-01T18:30:00'
+                    cantidadEntradas: 2
+                    precioTotal: 91.0
+                    metodoPago: tarjeta
+                    codigoReserva: RSV-2026-001
+                    confirmada: false
+                    usuario:
+                      id: 1
+                    evento:
+                      id: 1
+                ejemplo2:
+                  summary: Reserva con método de pago actualizado
+                  value:
+                    id: 2
+                    fechaReserva: '2026-04-05T10:00:00'
+                    cantidadEntradas: 4
+                    precioTotal: 100.0
+                    metodoPago: bizum
+                    codigoReserva: RSV-2026-002
+                    confirmada: false
+                    usuario:
+                      id: 2
+                    evento:
+                      id: 2
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [Reservas]
+      summary: Eliminar reserva
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: Reserva eliminada correctamente
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /reservas/confirmadas:
+    get:
+      tags: [Reservas]
+      summary: Obtener reservas confirmadas
+      description: Devuelve las reservas con confirmada = true mediante una consulta JPQL.
+      responses:
+        '200':
+          description: Lista de reservas confirmadas obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reserva'
+              examples:
+                ejemplo1:
+                  summary: Una reserva confirmada
+                  value:
+                    - id: 1
+                      fechaReserva: '2026-04-01T18:30:00'
+                      cantidadEntradas: 2
+                      precioTotal: 91.0
+                      metodoPago: tarjeta
+                      codigoReserva: RSV-2026-001
+                      confirmada: true
+                      usuario:
+                        id: 1
+                      evento:
+                        id: 1
+                ejemplo2:
+                  summary: Varias reservas confirmadas
+                  value:
+                    - id: 1
+                      fechaReserva: '2026-04-01T18:30:00'
+                      cantidadEntradas: 2
+                      precioTotal: 91.0
+                      metodoPago: tarjeta
+                      codigoReserva: RSV-2026-001
+                      confirmada: true
+                      usuario:
+                        id: 1
+                      evento:
+                        id: 1
+                    - id: 3
+                      fechaReserva: '2026-04-10T09:00:00'
+                      cantidadEntradas: 1
+                      precioTotal: 45.5
+                      metodoPago: efectivo
+                      codigoReserva: RSV-2026-003
+                      confirmada: true
+                      usuario:
+                        id: 3
+                      evento:
+                        id: 1
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  parameters:
+    IdPath:
+      name: id
+      in: path
+      required: true
+      description: Identificador único del recurso
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+      example: 1
+
+  responses:
+    BadRequest:
+      description: Error de validación o petición incorrecta
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            title: bad-request
+            message: Error de validación
+            errors:
+              email: El email no es válido
+              password: La contraseña debe tener entre 6 y 20 caracteres
+
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            title: not-found
+            message: Recurso no encontrado
+            errors: {}
+
+    InternalServerError:
+      description: Error interno del servidor
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 500
+            title: internal-server-error
+            message: Error interno del servidor
+            errors: {}
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 400
+        title:
+          type: string
+          example: bad-request
+        message:
+          type: string
+          example: Error de validación
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+      required:
+        - code
+        - title
+        - message
+        - errors
+
+    UsuarioRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+      required:
+        - id
+
+    ArtistaRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+      required:
+        - id
+
+    RecintoRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+      required:
+        - id
+
+    EventoRef:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+      required:
+        - id
+
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        nombre:
+          type: string
+          minLength: 2
+          example: Lucia
+        apellidos:
+          type: string
+          minLength: 2
+          example: Perez Gomez
+        email:
+          type: string
+          format: email
+          example: lucia@gmail.com
+        password:
+          type: string
+          minLength: 6
+          maxLength: 20
+          example: secreto12
+        telefono:
+          type: string
+          example: '600123123'
+        activo:
+          type: boolean
+          example: true
+        fechaNacimiento:
+          type: string
+          format: date
+          example: '1999-05-12'
+        eventosAsistidos:
+          type: integer
+          minimum: 0
+          example: 4
+        rol:
+          type: string
+          example: USER
+        saldoCuenta:
+          type: number
+          format: float
+          minimum: 0
+          example: 35.5
+      required:
+        - nombre
+        - apellidos
+        - email
+        - password
+
+    Artista:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        nombreArtistico:
+          type: string
+          minLength: 2
+          example: Aitana
+        nombreReal:
+          type: string
+          minLength: 2
+          example: Aitana Ocaña Morales
+        generoMusical:
+          type: string
+          example: Pop
+        fechaNacimiento:
+          type: string
+          format: date
+          example: '1999-06-27'
+        activo:
+          type: boolean
+          example: true
+        cache:
+          type: number
+          format: float
+          minimum: 0
+          example: 5000.0
+        eventosRealizados:
+          type: integer
+          minimum: 0
+          example: 20
+      required:
+        - nombreArtistico
+        - nombreReal
+
+    Recinto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        nombre:
+          type: string
+          minLength: 2
+          example: Pabellón Príncipe Felipe
+        direccion:
+          type: string
+          minLength: 2
+          example: Avenida Cesáreo Alierta 120
+        ciudad:
+          type: string
+          minLength: 2
+          example: Zaragoza
+        capacidad:
+          type: integer
+          minimum: 1
+          example: 10000
+        cubierto:
+          type: boolean
+          example: true
+        precioAlquiler:
+          type: number
+          format: float
+          minimum: 0
+          example: 25000.0
+        eventosCelebrados:
+          type: integer
+          minimum: 0
+          example: 150
+        fechaInauguracion:
+          type: string
+          format: date
+          example: '1990-01-01'
+      required:
+        - nombre
+        - direccion
+        - ciudad
+
+    Evento:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        nombre:
+          type: string
+          minLength: 2
+          example: Festival de Primavera
+        descripcion:
+          type: string
+          example: Festival de música en directo
+        fechaEvento:
+          type: string
+          format: date
+          example: '2026-06-20'
+        horaEvento:
+          type: string
+          example: '21:00:00'
+        precioEntrada:
+          type: number
+          format: float
+          minimum: 0
+          example: 45.5
+        aforoMaximo:
+          type: integer
+          minimum: 1
+          example: 12000
+        entradasDisponibles:
+          type: integer
+          minimum: 0
+          example: 8500
+        cancelado:
+          type: boolean
+          example: false
+        presencial:
+          type: boolean
+          example: true
+        categoria:
+          type: string
+          example: Festival
+        usuario:
+          $ref: '#/components/schemas/UsuarioRef'
+        artista:
+          $ref: '#/components/schemas/ArtistaRef'
+        recinto:
+          $ref: '#/components/schemas/RecintoRef'
+      required:
+        - nombre
+        - fechaEvento
+        - horaEvento
+        - usuario
+        - artista
+        - recinto
+
+    Reserva:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        fechaReserva:
+          type: string
+          format: date-time
+          example: '2026-04-01T18:30:00'
+        cantidadEntradas:
+          type: integer
+          minimum: 1
+          example: 2
+        precioTotal:
+          type: number
+          format: float
+          minimum: 0
+          example: 91.0
+        metodoPago:
+          type: string
+          example: tarjeta
+        codigoReserva:
+          type: string
+          minLength: 3
+          example: RSV-2026-001
+        confirmada:
+          type: boolean
+          example: true
+        usuario:
+          $ref: '#/components/schemas/UsuarioRef'
+        evento:
+          $ref: '#/components/schemas/EventoRef'
+      required:
+        - fechaReserva
+        - cantidadEntradas
+        - precioTotal
+        - codigoReserva
+        - usuario
+        - evento
