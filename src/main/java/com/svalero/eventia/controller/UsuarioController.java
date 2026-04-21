@@ -13,12 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import com.svalero.eventia.domain.UsuarioV2;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 public class UsuarioController {
 
     @Autowired
@@ -26,48 +28,80 @@ public class UsuarioController {
 
     private final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
 
-    @GetMapping("/usuarios")
+    @GetMapping("/v1/usuarios")
     public ResponseEntity<List<Usuario>> getAllUsuarios(
             @RequestParam(required = false) String nombre,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String rol) {
-        logger.info("GET /usuarios - filtros nombre={}, categoria={}, cancelado={}", nombre, email, rol);
+        logger.info("GET /api/v1/usuarios - filtros nombre={}, categoria={}, cancelado={}", nombre, email, rol);
         List<Usuario> usuarios = usuarioService.findAll(nombre, email, rol);
         return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/usuarios/{id}")
-    public ResponseEntity<Usuario> getUsuario(@PathVariable long id) throws UsuarioNotFoundException {
-        logger.info("GET/usuarios/{}", id);
+    @GetMapping("/v1/usuarios/{id}")
+    public ResponseEntity<Usuario> getUsuarioV1(@PathVariable long id) throws UsuarioNotFoundException {
+        logger.info("GET /api/v1/usuarios/{}", id);
         Usuario usuario = usuarioService.findById(id);
         return ResponseEntity.ok(usuario);
     }
 
-    @PostMapping("/usuarios")
-    public ResponseEntity<Usuario> addUsuario(@Valid @RequestBody Usuario usuario) {
-        logger.info("POST/usuarios");
+    @GetMapping("/v2/usuarios/{id}")
+    public ResponseEntity<UsuarioV2> getUsuarioV2(@PathVariable long id) throws UsuarioNotFoundException {
+        logger.info("GET /api/v2/usuarios/{}", id);
+        UsuarioV2 usuario = usuarioService.findByIdV2(id);
+        return ResponseEntity.ok(usuario);
+    }
+
+    @PostMapping("/v1/usuarios")
+    public ResponseEntity<Usuario> addUsuarioV1(@Valid @RequestBody Usuario usuario) {
+        logger.info("POST /api/v1/usuarios");
         Usuario nuevoUsuario = usuarioService.add(usuario);
         return new ResponseEntity<>(nuevoUsuario, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/usuarios/{id}")
-    public ResponseEntity<Void> deleteUsuario(@PathVariable long id) throws UsuarioNotFoundException {
-        logger.info("DELETE/usuarios/{}",id);
+    @PostMapping("/v2/usuarios")
+    public ResponseEntity<UsuarioV2> addUsuarioV2(@Valid @RequestBody UsuarioV2 usuario) {
+        logger.info("POST /api/v2/usuarios");
+        UsuarioV2 nuevoUsuario = usuarioService.addV2(usuario);
+        return new ResponseEntity<>(nuevoUsuario, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/v1/usuarios/{id}")
+    public ResponseEntity<Void> deleteUsuarioV1(@PathVariable long id) throws UsuarioNotFoundException {
+        logger.info("DELETE /api/v1/usuarios/{}", id);
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/usuarios/{id}")
-    public ResponseEntity<Usuario> modifyUsuario(@PathVariable long id, @Valid @RequestBody Usuario usuario) throws UsuarioNotFoundException {
-        logger.info("PUT/usuarios/{}",id);
+    @DeleteMapping("/v2/usuarios/{id}")
+    public ResponseEntity<Map<String, String>> deleteUsuarioV2(@PathVariable long id) throws UsuarioNotFoundException {
+        logger.info("DELETE /api/v2/usuarios/{}", id);
+        String mensaje = usuarioService.deleteV2(id);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", mensaje);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/v1/usuarios/{id}")
+    public ResponseEntity<Usuario> modifyUsuarioV1(@PathVariable long id, @Valid @RequestBody Usuario usuario) throws UsuarioNotFoundException {
+        logger.info("PUT /api/v1/usuarios/{}", id);
         Usuario usuarioModificado = usuarioService.modify(id, usuario);
         return ResponseEntity.ok(usuarioModificado);
     }
 
-    @PatchMapping("/usuarios/{id}")
+    @PutMapping("/v2/usuarios/{id}")
+    public ResponseEntity<UsuarioV2> modifyUsuarioV2(@PathVariable long id, @Valid @RequestBody UsuarioV2 usuario) throws UsuarioNotFoundException {
+        logger.info("PUT /api/v2/usuarios/{}", id);
+        UsuarioV2 usuarioModificado = usuarioService.modifyV2(id, usuario);
+        return ResponseEntity.ok(usuarioModificado);
+    }
+
+    @PatchMapping("/v1/usuarios/{id}")
     public ResponseEntity<Usuario> patchUsuario(@PathVariable long id,
                                                 @RequestBody Map<String, Object> updates) throws UsuarioNotFoundException {
-        logger.info("PATCH/usuarios/{}",id);
+        logger.info("PATCH/api/v1/usuarios/{}",id);
         Usuario usuarioActualizado = usuarioService.patch(id, updates);
         return ResponseEntity.ok(usuarioActualizado);
     }
