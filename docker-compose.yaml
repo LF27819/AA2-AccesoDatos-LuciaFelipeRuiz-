@@ -1,0 +1,32 @@
+name: eventia2
+services:
+  eventia2-db:
+    image: mariadb:11.3.2
+    container_name: eventia2-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  eventia2-api:
+    image: eventia-api
+    container_name: eventia2-api
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      eventia2-db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: $PROFILES
+      DB_USER: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD

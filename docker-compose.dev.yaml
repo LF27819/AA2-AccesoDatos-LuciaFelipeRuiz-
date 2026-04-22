@@ -1,13 +1,12 @@
-name: eventia
+name: eventia2-dev
 services:
-  db:
+  eventia2-db:
     image: mariadb:11.3.2
-    container_name: eventia-db
+    container_name: eventia2-db-dev
     environment:
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-      MYSQL_DATABASE: eventia_db
-      MYSQL_PORT: 3306,
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3307:3306"
