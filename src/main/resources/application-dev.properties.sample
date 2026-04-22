@@ -1,0 +1,6 @@
+spring.datasource.url=jdbc:mariadb://localhost:3306/eventia
+spring.datasource.username=tu_usuario
+spring.datasource.password=tu_password
+spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
+
+logging.level.org.springframework=DEBUG
