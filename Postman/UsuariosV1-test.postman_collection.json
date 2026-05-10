@@ -1,0 +1,419 @@
+{
+  "info": {
+    "_postman_id": "3ffeecc6-870a-484b-90ba-4bcbf5b28b5e",
+    "name": "UsuariosV1-test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53466918",
+    "_collection_link": "https://go.postman.co/collection/53466918-3ffeecc6-870a-484b-90ba-4bcbf5b28b5e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "/api/v1/usuarios",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status code is 201\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(201);\r",
+              "});\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"response structure is ok\", function () {\r",
+              "    pm.expect(jsonResponse).to.have.property(\"id\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"nombre\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"apellidos\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"email\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"password\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"telefono\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"activo\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"fechaNacimiento\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"eventosAsistidos\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"rol\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"saldoCuenta\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"response values are ok\", function () {\r",
+              "    pm.expect(jsonResponse.nombre).to.eql(pm.collectionVariables.get(\"nombre1\"));\r",
+              "    pm.expect(jsonResponse.email).to.eql(pm.collectionVariables.get(\"email1\"));\r",
+              "});\r",
+              "\r",
+              "pm.collectionVariables.set(\"usuarioId\", jsonResponse.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nombre\": \"{{nombre1}}\",\r\n  \"apellidos\": \"Test\",\r\n  \"email\": \"{{email1}}\",\r\n  \"password\": \"123456\",\r\n  \"telefono\": \"123456789\",\r\n  \"activo\": true,\r\n  \"fechaNacimiento\": \"2000-01-01\",\r\n  \"eventosAsistidos\": 2,\r\n  \"rol\": \"USER\",\r\n  \"saldoCuenta\": 50\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{HOST}}/api/v1/usuarios",
+          "host": [
+            "{{HOST}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/api/v1/usuarios/id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(200);\r",
+              "});\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"response structure is ok\", function () {\r",
+              "    pm.expect(jsonResponse).to.have.property(\"id\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"nombre\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"email\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"data is ok\", function () {\r",
+              "    pm.expect(jsonResponse.id).to.eql(Number(pm.collectionVariables.get(\"usuarioId\")));\r",
+              "    pm.expect(jsonResponse.nombre).to.eql(pm.collectionVariables.get(\"nombre1\"));\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{HOST}}/api/v1/usuarios/{{usuarioId}}",
+          "host": [
+            "{{HOST}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "{{usuarioId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/api/v1/usuarios/id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(200);\r",
+              "});\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"response structure is ok\", function () {\r",
+              "    pm.expect(jsonResponse).to.have.property(\"id\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"nombre\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"rol\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"data has changed\", function () {\r",
+              "    pm.expect(jsonResponse.nombre).to.eql(pm.collectionVariables.get(\"changedName\"));\r",
+              "    pm.expect(jsonResponse.rol).to.eql(\"ADMIN\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nombre\": \"{{changedName}}\",\r\n  \"apellidos\": \"Test\",\r\n  \"email\": \"{{email2}}\",\r\n  \"password\": \"123456\",\r\n  \"telefono\": \"999999999\",\r\n  \"activo\": true,\r\n  \"fechaNacimiento\": \"2000-01-01\",\r\n  \"eventosAsistidos\": 5,\r\n  \"rol\": \"ADMIN\",\r\n  \"saldoCuenta\": 100\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{HOST}}/api/v1/usuarios/{{usuarioId}}",
+          "host": [
+            "{{HOST}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "{{usuarioId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/api/v1/usuarios/id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(200);\r",
+              "});\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"response structure is ok\", function () {\r",
+              "    pm.expect(jsonResponse).to.have.property(\"id\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"rol\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"saldoCuenta\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"patch updated fields correctly\", function () {\r",
+              "    pm.expect(jsonResponse.rol).to.eql(\"ADMIN\");\r",
+              "    pm.expect(jsonResponse.saldoCuenta).to.eql(250);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"rol\": \"ADMIN\",\r\n  \"saldoCuenta\": 250\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{HOST}}/api/v1/usuarios/{{usuarioId}}",
+          "host": [
+            "{{HOST}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "{{usuarioId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/api/v1/usuarios/id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status code is 204\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(204);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"response body is empty\", function () {\r",
+              "    pm.expect(pm.response.text()).to.eql(\"\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{HOST}}/api/v1/usuarios/{{usuarioId}}",
+          "host": [
+            "{{HOST}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "{{usuarioId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/api/v1/usuarios/id 404",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status code is 404\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(404);\r",
+              "});\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"error response structure is ok\", function () {\r",
+              "    pm.expect(jsonResponse).to.have.property(\"code\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"title\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"message\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{HOST}}/api/v1/usuarios/999999",
+          "host": [
+            "{{HOST}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "999999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/api/v1/usuarios 400",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"status code is 400\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(400);\r",
+              "});\r",
+              "\r",
+              "const jsonResponse = pm.response.json();\r",
+              "\r",
+              "pm.test(\"error response structure is ok\", function () {\r",
+              "    pm.expect(jsonResponse).to.have.property(\"code\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"title\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"message\");\r",
+              "    pm.expect(jsonResponse).to.have.property(\"errors\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nombre\": \"Error Test\",\r\n  \"apellidos\": \"Test\",\r\n  \"email\": \"{{email1}\",\r\n  \"password\": \"123\",\r\n  \"telefono\": \"123456789\",\r\n  \"activo\": true,\r\n  \"fechaNacimiento\": \"2000-01-01\",\r\n  \"eventosAsistidos\": 2,\r\n  \"rol\": \"USER\",\r\n  \"saldoCuenta\": 50\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{HOST}}/api/v1/usuarios",
+          "host": [
+            "{{HOST}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "usuarioId",
+      "value": ""
+    },
+    {
+      "key": "email1",
+      "value": "email1@usuario.com"
+    },
+    {
+      "key": "nombre1",
+      "value": "Usuario1"
+    },
+    {
+      "key": "changedName",
+      "value": "UsuarioModificado"
+    },
+    {
+      "key": "email2",
+      "value": "email2@usuario.com"
+    }
+  ]
+}
