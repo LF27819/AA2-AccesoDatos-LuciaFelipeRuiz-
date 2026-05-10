@@ -1,10 +1,7 @@
 package com.svalero.eventia.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -59,7 +56,6 @@ public class UsuarioV2 {
     @Column(name = "saldo_cuenta")
     private float saldoCuenta;
 
-    @NotNull(message = "El nickname es obligatorio en la versión 2")
     @Column(nullable = true)
     private String nickname;
 }

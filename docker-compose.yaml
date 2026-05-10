@@ -11,6 +11,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3308:3306"
+    volumes:
+      - eventia2_prod_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 5s
@@ -30,3 +32,6 @@ services:
       SPRING_PROFILES_ACTIVE: $PROFILES
       DB_USER: $DB_USER
       DB_PASSWORD: $DB_PASSWORD
+
+volumes:
+  eventia2_prod_data:

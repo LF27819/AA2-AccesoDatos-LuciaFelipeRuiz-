@@ -10,3 +10,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3307:3306"
+    volumes:
+      - eventia2_dev_data:/var/lib/mysql
+
+volumes:
+  eventia2_dev_data:
