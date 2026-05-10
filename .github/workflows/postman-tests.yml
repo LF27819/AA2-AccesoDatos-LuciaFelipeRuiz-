@@ -43,16 +43,33 @@ jobs:
       - name: Dar permisos a Maven Wrapper
         run: chmod +x mvnw
 
+      - name: Compilar proyecto
+        run: ./mvnw clean package -DskipTests
+
       - name: Arrancar API
         run: |
-          ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev &
-          sleep 40
+          nohup ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev > app.log 2>&1 &
 
-      - name: Comprobar que la API responde
-        run: curl --fail http://localhost:8080/api/v1/usuarios/999999 || true
+      - name: Esperar a que la API arranque
+        run: |
+          for i in {1..60}; do
+            if curl -s http://localhost:8080/api/v1/usuarios/999999 > /dev/null; then
+              echo "API arrancada"
+              exit 0
+            fi
+            echo "Esperando API..."
+            sleep 2
+          done
+          echo "La API no arrancó"
+          cat app.log
+          exit 1
 
       - name: Instalar Newman
         run: npm install -g newman
 
       - name: Ejecutar colección de Postman
         run: newman run Postman/UsuariosV1-test.postman_collection.json -e Postman/local.postman_environment.json
+
+      - name: Mostrar logs si falla
+        if: failure()
+        run: cat app.log
