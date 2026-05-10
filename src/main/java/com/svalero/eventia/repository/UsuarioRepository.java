@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
@@ -22,5 +23,7 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     List<Usuario> findByFilters(@Param("nombre") String nombre,
                               @Param("email") String email,
                               @Param("rol") String rol);
+
+    Optional<Usuario> findByEmail(String email);
 
 }
