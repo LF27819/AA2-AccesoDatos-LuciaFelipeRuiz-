@@ -35,7 +35,7 @@ public class Usuario {
     private String email;
     @NotNull(message = "La contraseña es obligatoria")
     @Column
-    @Size(min = 6, max = 20, message = "La contraseña debe tener entre 6 y 20 caracteres")
+    @Size(min = 6, max = 255, message = "La contraseña debe tener entre 6 y 20 caracteres")
     private String password;
     @Column
     private String telefono;
